@@ -1,0 +1,20 @@
+constructor(formContainerId, formData) {
+    this.container = document.getElementById(formContainerId);
+    this.form = document.createElement('form');
+    this.formData = formData;
+
+    this.initializeForm();
+    this.form.addEventListener('submit', (event) => this.handleSubmit(event));
+
+    this.container.appendChild(this.form);
+    this.submitHandler = null;
+  }
+
+ initializeForm() {
+    this.formData.forEach(field => {
+      const inputElement = this.createInputElement(field);
+      if (inputElement) {
+        this.form.appendChild(inputElement);
+      }
+    });
+  }
