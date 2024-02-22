@@ -1,9 +1,31 @@
 export default class Storage {
   constructor(storageId) {
-    this.storageId = storageId; // use this.storageId with localStorage as a unique key to store data
-    // Pass storageId to save json string data after each operation in localStorage
-    // local storageId is important to retrieve old saved data
+    this.storageId = storageId;
     console.log('Storage');
   }
-  // create methods to perform operations like save/edit/delete/add data
+
+  loadData() {
+    const storedData = localStorage.getItem(this.storageId);
+    return storedData ? JSON.parse(storedData) : [];
+  }
+
+  saveData(data) {
+    localStorage.setItem(this.storageId, JSON.stringify(data));
+  }
+  getDataById(userId) {
+    const data = this.loadData();
+    return data.find((item) => item.userId === userId);
+  }
+
+  addData(newData, getUserId, getCreatedAt) {
+    const data = this.loadData();
+    const userId = getUserId(newData);
+    const createdAt = getCreatedAt(newData);
+
+    newData.userId = userId;
+    newData.createdAt = createdAt;
+
+    data.push(newData);
+    this.saveData(data);
+  }
 }
