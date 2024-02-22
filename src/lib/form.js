@@ -1,7 +1,9 @@
 export default class Form {
   constructor(formContainerId, formData) {
     this.container = document.getElementById(formContainerId);
-    this.container.addEventListener('submit', (event) => this.handleForm(event));
+    console.log("yeh h" ,formContainerId)
+    // this.container.addEventListener('submit', this.handleSubmit.bind(this))
+    this.container.addEventListener('submit', this.handleForm.bind(this));
     this.formData = formData;
     this.startForm();
   }
@@ -158,7 +160,7 @@ export default class Form {
     return inputContainer;
   }
 
-  handleForm() {
+  handleForm(event) {
     event.preventDefault();
 
     const getFormData = {};
@@ -190,6 +192,9 @@ export default class Form {
       }
     });
     console.log(getFormData);
+
+    const formSubmitEvent = new CustomEvent('formSubmit');
+    document.dispatchEvent(formSubmitEvent);
     return getFormData;
   }
 }
