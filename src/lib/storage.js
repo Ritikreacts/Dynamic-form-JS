@@ -17,15 +17,15 @@ export default class Storage {
     return data.find((item) => item.userId === userId);
   }
 
-  addData(newData, getUserId, getCreatedAt) {
+  addData(dataToAdd, getUserId, getCreatedAt) {
     const data = this.loadData();
-    const userId = getUserId(newData);
-    const createdAt = getCreatedAt(newData);
+    const userId = getUserId(dataToAdd);
+    const createdAt = getCreatedAt(dataToAdd);
 
-    newData.userId = userId;
-    newData.createdAt = createdAt;
+    dataToAdd.userId = userId;
+    dataToAdd.createdAt = createdAt;
 
-    data.push(newData);
+    data.push(dataToAdd);
     this.saveData(data);
   }
 }

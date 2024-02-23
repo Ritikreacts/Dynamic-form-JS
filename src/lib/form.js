@@ -1,7 +1,7 @@
 export default class Form {
   constructor(formContainerId, formData) {
     this.container = document.getElementById(formContainerId);
-    console.log("yeh h" ,formContainerId)
+    console.log('Form ki ID = ', formContainerId);
     // this.container.addEventListener('submit', this.handleSubmit.bind(this))
     this.container.addEventListener('submit', this.handleForm.bind(this));
     this.formData = formData;
@@ -15,6 +15,9 @@ export default class Form {
         this.container.appendChild(inputElement);
       }
     });
+  }
+  resetForm() {
+    this.container.reset();
   }
 
   createInputElement(field) {
@@ -167,6 +170,10 @@ export default class Form {
     Array.from(this.container.elements).forEach((element) => {
       if (element.name) {
         switch (element.type) {
+          case 'hidden':
+            getFormData[element.name] = element.value;
+
+            break;
           case 'checkbox':
             if (element.checked) {
               getFormData[element.name] = getFormData[element.name] || [];
@@ -191,10 +198,11 @@ export default class Form {
         }
       }
     });
-    console.log(getFormData);
+    // console.log(getFormData);
 
-    const formSubmitEvent = new CustomEvent('formSubmit');
+    const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
     document.dispatchEvent(formSubmitEvent);
-    return getFormData;
+    console.log(getFormData);
+    this.resetForm();
   }
 }

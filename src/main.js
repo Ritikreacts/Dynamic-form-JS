@@ -5,35 +5,32 @@ import Table from './lib/table.js';
 
 class Main {
   constructor(formContainerId, storageId, tableContainerId) {
-
-    // this.dataToMain();
-    const getUserId = (obj) => formData.find((field) => field.key === 'userId').getValue(obj);
-    const getCreatedAt = (obj) => formData.find((field) => field.key === 'createdAt').getValue(obj);
-
-    const storage = new Storage(storageId);
+    this.storage = new Storage(storageId);
     this.frm = new Form(formContainerId, formData);
-    // frm.container.addEventListener('submit', (e) => {
-    //   e.preventDefault();
-    //   const data = frm.handleForm();
-    //   console.log(data);
-    // });
+    this.tbl = new Table(tableContainerId);
+    console.log(this.tbl);
+    this.getUserId = (obj) => formData.find((field) => field.key === 'userId').getValue(obj);
+    this.getCreatedAt = (obj) => formData.find((field) => field.key === 'createdAt').getValue(obj);
 
-    // const tbl = new Table(tableContainerId);
-    // this.initializeForm();
     this.setupEventListeners();
   }
-  // initializeForm(formContainerId) {
-  //   this.form = new Form(formContainerId);
-  // }
 
   setupEventListeners() {
     document.addEventListener('formSubmit', this.handleFormSubmit.bind(this));
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(event) {
+    const getFormData = event.detail;
+    this.initializeHandlers(getFormData);
+  }
 
-    const data = this.frm.handleForm({ preventDefault: () => {} });
-    console.log(data)
+  initializeHandlers(formDataObject) {
+    const getUserId = this.getUserId;
+    const getCreatedAt = this.getCreatedAt;
+    this.storage.addData(formDataObject, getUserId, getCreatedAt);
+    this.tbl.appendHeader(formData);
+    this.tbl.appendDataRow(formDataObject);
+    alert('Data added successfully!');
   }
 }
 
