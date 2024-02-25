@@ -2,10 +2,10 @@ export default class Form {
   constructor(formContainerId, formData) {
     this.container = document.getElementById(formContainerId);
     console.log('Form ki ID = ', formContainerId);
-    // this.container.addEventListener('submit', this.handleSubmit.bind(this))
     this.container.addEventListener('submit', this.handleForm.bind(this));
     this.formData = formData;
     this.startForm();
+
   }
 
   startForm() {
@@ -174,15 +174,40 @@ export default class Form {
             getFormData[element.name] = element.value;
 
             break;
-          case 'checkbox':
-            if (element.checked) {
-              getFormData[element.name] = getFormData[element.name] || [];
-              getFormData[element.name].push(element.value);
+            case 'checkbox':
+          getFormData[element.name] = getFormData[element.name] || [];
+
+          if (element.checked) {
+            if (!Array.isArray(getFormData[element.name])) {
+              getFormData[element.name] = [];
             }
-            break;
+            getFormData[element.name].push(element.value);
+          } else {
+            if (!Array.isArray(getFormData[element.name])) {
+              getFormData[element.name] = [];
+            }
+            if (Array.isArray(getFormData[element.name])) {
+              getFormData[element.name] = getFormData[element.name].filter(value => value !== element.value);
+            }
+
+            if (getFormData[element.name].length === 0) {
+              getFormData[element.name] = "-";
+            }
+          }
+          break;
+
+          // case 'checkbox':
+          //   if (element.checked) {
+          //     getFormData[element.name] = getFormData[element.name] || [];
+          //     getFormData[element.name].push(element.value);
+          //   }
+          //   break;
           case 'radio':
             if (element.checked) {
               getFormData[element.name] = element.value;
+            }
+            else{
+              getFormData[element.name] ="-";
             }
             break;
           case 'select-one':
@@ -199,10 +224,63 @@ export default class Form {
       }
     });
     // console.log(getFormData);
+    const btn = document.querySelector('[type="submit"]');
+
+    if (btn.value === 'Submit') {
+        const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
+        document.dispatchEvent(formSubmitEvent);
+        console.log(getFormData);
+        this.resetForm();
+    } else if (btn.value === 'Update') {
+        const formUpdateEvent = new CustomEvent('formUpdateSubmit', { detail: getFormData });
+        document.dispatchEvent(formUpdateEvent);
+        console.log(getFormData);
+        this.resetForm();
+    }
 
     const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
     document.dispatchEvent(formSubmitEvent);
     console.log(getFormData);
     this.resetForm();
   }
+
+  fillFormOnEdit(getFormData){
+      Array.from(this.container.elements).forEach((element) => {
+          const value = getFormData[element.name];
+
+          switch (element.type) {
+            // case 'hidden':
+            // case 'text':
+            // case 'password':
+            // case 'textarea':
+            // case 'select-one':
+            //   element.value = value;
+            //   break;
+              case 'submit':
+              element.value = 'Update';
+                break;
+                case 'reset':
+                element.value = 'Cancel';
+              break;
+            case 'checkbox':
+              element.checked = Array.isArray(value) ? value.includes(element.value) : false;
+              break;
+            case 'radio':
+              element.checked = value === element.value;
+              break;
+            case 'select-multiple':
+              Array.from(element.options).forEach((option) => {
+                option.selected = Array.isArray(value) ? value.includes(option.value) : false;
+              });
+              break;
+            default:
+              element.value = value;
+             break;
+
+          }
+        });
+
+  }
+
+
 }

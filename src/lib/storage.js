@@ -16,6 +16,11 @@ export default class Storage {
     const data = this.loadData();
     return data.find((item) => item.userId === userId);
   }
+  deleteData(userId){
+    let data = this.loadData();
+         data = data.filter((item) => item.userId !== userId);
+        this.saveData(data);
+  }
 
   addData(dataToAdd, getUserId, getCreatedAt) {
     const data = this.loadData();
