@@ -8,13 +8,11 @@ class Main {
     this.storage = new Storage(storageId);
     this.frm = new Form(formContainerId, formData);
     this.tbl = new Table(tableContainerId);
-    console.log(this.tbl);
     this.getUserId = (obj) => formData.find((field) => field.key === 'userId').getValue(obj);
     this.getCreatedAt = (obj) => formData.find((field) => field.key === 'createdAt').getValue(obj);
 
     this.setupEventListeners();
   }
-
 
   setupEventListeners() {
     document.addEventListener('formSubmit', this.handleFormSubmit.bind(this));
@@ -27,26 +25,26 @@ class Main {
     const getFormData = event.detail;
     this.initializeHandlers(getFormData);
   }
-  handleFormUpdate(event){
+  handleFormUpdate(event) {
     const getFormData = event.detail;
-    this.editDataHandler(getFormData);
+    const userId = this.userId;
+    this.editDataHandler(getFormData, userId);
   }
   handleDeleteItem(event) {
     const userId = event.detail;
     this.storage.deleteData(userId);
-    console.log(`User with ID ${userId} is marked for deletion.`);
+    const data = this.storage.loadData();
+    this.tbl.updateDisplay(data);
   }
   handleEditItem(event) {
-    const userId = event.detail;
-    console.log(`User with ID ${userId} is marked for edition.`);
-    const data=this.storage.loadData();
-    const formDataToEdit = data.find(obj => obj.userId === userId);
-    console.log("formDataToEdit",formDataToEdit)
-    this.frm.fillFormOnEdit(formDataToEdit)
+    this.userId = event.detail;
+    const data = this.storage.loadData();
+    const formDataToEdit = data.find((obj) => obj.userId === this.userId);
+    this.frm.fillFormOnEdit(formDataToEdit);
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
-     })
+      behavior: 'smooth',
+    });
   }
   initializeHandlers(formDataObject) {
     const getUserId = this.getUserId;
@@ -54,31 +52,33 @@ class Main {
     this.storage.addData(formDataObject, getUserId, getCreatedAt);
     this.tbl.appendHeader(formData);
     this.tbl.appendDataRow(formDataObject);
-    alert('Data added successfully!');
-  }
-  editDataHandler(getFormData) {
     const data = this.storage.loadData();
-    const dataChange = data.filter((item) => item.userId == getFormData.userId);
+    this.tbl.updateDisplay(data);
+  }
+  editDataHandler(getFormData, userId) {
+    const data = this.storage.loadData();
+    const formDataToEdit = data.find((obj) => obj.userId === this.userId);
+    getFormData.userId = userId;
+    const formDataToEditClone = Object.keys(formDataToEdit)
+      .filter((objKey) => objKey !== 'createdAt')
+      .reduce((newObj, key) => {
+        newObj[key] = formDataToEdit[key];
+        return newObj;
+      }, {});
 
-    const compareObjects = (obj1, obj2) => {
-      const { createdAt, ...data1 } = obj1;
-      const { createdAt: _, ...data2 } = obj2;
-      for (const key in data1) {
-        if (data1[key] !== data2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    if (compareObjects(dataChange, getFormData)) {
+    if (JSON.stringify(getFormData) == JSON.stringify(formDataToEditClone)) {
       alert('No changes');
     } else {
       alert('Changed');
+      this.tbl.updateRow(userId, getFormData);
+      this.storage.updateData(getFormData, userId);
     }
   }
-
-
 }
 
 const main = new Main('employeeForm', 'storageId', 'tableDiv');
+const dataInStorage = main.storage.loadData();
+main.tbl.appendHeader(formData);
+main.tbl.displayDataOnLoad(dataInStorage);
+const data = main.storage.loadData();
+main.tbl.updateDisplay(data);

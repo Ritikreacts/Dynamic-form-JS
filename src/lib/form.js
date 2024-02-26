@@ -1,11 +1,9 @@
 export default class Form {
   constructor(formContainerId, formData) {
     this.container = document.getElementById(formContainerId);
-    console.log('Form ki ID = ', formContainerId);
     this.container.addEventListener('submit', this.handleForm.bind(this));
     this.formData = formData;
     this.startForm();
-
   }
 
   startForm() {
@@ -34,16 +32,17 @@ export default class Form {
 
     switch (field.type) {
       case 'submit':
-      case 'reset':
+      case 'reset': {
         const buttonElement = document.createElement('input');
         buttonElement.setAttribute('type', field.type);
         buttonElement.setAttribute('id', field.attr && field.attr.id ? field.attr.id : field.key);
         buttonElement.setAttribute('name', field.key);
         buttonElement.setAttribute('class', field.attr && field.attr.className ? field.attr.className : 'btn');
+        buttonElement.setAttribute('value', field.attr && field.attr.value ? field.attr.value : '');
         buttonElement.innerText = field.value || '';
         return buttonElement;
-
-      case 'radio':
+      }
+      case 'radio': {
         field.options.forEach((option) => {
           const radioContainer = document.createElement('div');
           radioContainer.classList.add('form-check');
@@ -51,6 +50,7 @@ export default class Form {
           const radioElement = document.createElement('input');
           radioElement.setAttribute('type', 'radio');
           radioElement.setAttribute('id', option.attr && option.attr.id ? option.attr.id : option.value);
+          radioElement.setAttribute('required', field.attr && field.attr.required ? 'required' : '');
           radioElement.setAttribute('name', field.key);
           radioElement.setAttribute(
             'class',
@@ -67,8 +67,8 @@ export default class Form {
           inputContainer.appendChild(radioContainer);
         });
         break;
-
-      case 'checkbox':
+      }
+      case 'checkbox': {
         field.options.forEach((option) => {
           const checkboxContainer = document.createElement('div');
           checkboxContainer.classList.add('form-check');
@@ -93,8 +93,8 @@ export default class Form {
           inputContainer.appendChild(checkboxContainer);
         });
         break;
-
-      case 'select':
+      }
+      case 'select': {
         const selectElement = document.createElement('select');
         selectElement.setAttribute('id', field.attr && field.attr.id ? field.attr.id : field.key);
         selectElement.setAttribute('name', field.key);
@@ -110,8 +110,8 @@ export default class Form {
         });
         inputContainer.appendChild(selectElement);
         break;
-
-      case 'textarea':
+      }
+      case 'textarea': {
         const textareaElement = document.createElement('textarea');
         textareaElement.setAttribute('id', field.attr && field.attr.id ? field.attr.id : field.key);
         textareaElement.setAttribute('name', field.key);
@@ -126,8 +126,8 @@ export default class Form {
         textareaElement.setAttribute('rows', field.attr && field.attr.rows ? field.attr.rows : '5');
         textareaElement.setAttribute('value', field.value || '');
         break;
-
-      case 'tel':
+      }
+      case 'tel': {
         const numberElement = document.createElement('input');
         numberElement.setAttribute('type', 'tel');
         numberElement.setAttribute('id', field.attr && field.attr.id ? field.attr.id : field.key);
@@ -145,8 +145,8 @@ export default class Form {
         numberElement.innerText = field.value || '';
         inputContainer.appendChild(numberElement);
         break;
-
-      default:
+      }
+      default: {
         const inputElement = document.createElement('input');
         inputElement.setAttribute('type', field.type);
         inputElement.setAttribute('id', field.attr && field.attr.id ? field.attr.id : field.key);
@@ -158,6 +158,7 @@ export default class Form {
         inputElement.setAttribute('value', field.value || '');
 
         inputContainer.appendChild(inputElement);
+      }
     }
 
     return inputContainer;
@@ -174,46 +175,39 @@ export default class Form {
             getFormData[element.name] = element.value;
 
             break;
-            case 'checkbox':
-          getFormData[element.name] = getFormData[element.name] || [];
+          case 'checkbox':
+            getFormData[element.name] = getFormData[element.name] || [];
 
-          if (element.checked) {
-            if (!Array.isArray(getFormData[element.name])) {
-              getFormData[element.name] = [];
-            }
-            getFormData[element.name].push(element.value);
-          } else {
-            if (!Array.isArray(getFormData[element.name])) {
-              getFormData[element.name] = [];
-            }
-            if (Array.isArray(getFormData[element.name])) {
-              getFormData[element.name] = getFormData[element.name].filter(value => value !== element.value);
-            }
+            if (element.checked) {
+              if (!Array.isArray(getFormData[element.name])) {
+                getFormData[element.name] = [];
+              }
+              getFormData[element.name].push(element.value);
+            } else {
+              if (!Array.isArray(getFormData[element.name])) {
+                getFormData[element.name] = [];
+              }
+              if (Array.isArray(getFormData[element.name])) {
+                getFormData[element.name] = getFormData[element.name].filter((value) => value !== element.value);
+              }
 
-            if (getFormData[element.name].length === 0) {
-              getFormData[element.name] = "-";
+              if (getFormData[element.name].length === 0) {
+                getFormData[element.name] = '-';
+              }
             }
-          }
-          break;
-
-          // case 'checkbox':
-          //   if (element.checked) {
-          //     getFormData[element.name] = getFormData[element.name] || [];
-          //     getFormData[element.name].push(element.value);
-          //   }
-          //   break;
+            break;
           case 'radio':
             if (element.checked) {
               getFormData[element.name] = element.value;
-            }
-            else{
-              getFormData[element.name] ="-";
             }
             break;
           case 'select-one':
           case 'select-multiple':
             getFormData[element.name] = getFormData[element.name] || [];
             getFormData[element.name].push(element.value);
+            break;
+          case 'reset':
+          case 'submit':
             break;
           default:
             if (element.value.length !== 0) {
@@ -223,64 +217,61 @@ export default class Form {
         }
       }
     });
-    // console.log(getFormData);
     const btn = document.querySelector('[type="submit"]');
-
     if (btn.value === 'Submit') {
-        const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
-        document.dispatchEvent(formSubmitEvent);
-        console.log(getFormData);
-        this.resetForm();
+      const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
+      document.dispatchEvent(formSubmitEvent);
+      this.formFullReset();
     } else if (btn.value === 'Update') {
-        const formUpdateEvent = new CustomEvent('formUpdateSubmit', { detail: getFormData });
-        document.dispatchEvent(formUpdateEvent);
-        console.log(getFormData);
-        this.resetForm();
+      const formUpdateEvent = new CustomEvent('formUpdateSubmit', { detail: getFormData });
+      document.dispatchEvent(formUpdateEvent);
+      this.resetForm();
+      this.formFullReset();
+    } else {
+      console.log('not matched with any');
     }
-
-    const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
-    document.dispatchEvent(formSubmitEvent);
-    console.log(getFormData);
-    this.resetForm();
   }
 
-  fillFormOnEdit(getFormData){
-      Array.from(this.container.elements).forEach((element) => {
-          const value = getFormData[element.name];
+  fillFormOnEdit(getFormData) {
+    Array.from(this.container.elements).forEach((element) => {
+      const value = getFormData[element.name];
 
-          switch (element.type) {
-            // case 'hidden':
-            // case 'text':
-            // case 'password':
-            // case 'textarea':
-            // case 'select-one':
-            //   element.value = value;
-            //   break;
-              case 'submit':
-              element.value = 'Update';
-                break;
-                case 'reset':
-                element.value = 'Cancel';
-              break;
-            case 'checkbox':
-              element.checked = Array.isArray(value) ? value.includes(element.value) : false;
-              break;
-            case 'radio':
-              element.checked = value === element.value;
-              break;
-            case 'select-multiple':
-              Array.from(element.options).forEach((option) => {
-                option.selected = Array.isArray(value) ? value.includes(option.value) : false;
-              });
-              break;
-            default:
-              element.value = value;
-             break;
-
-          }
-        });
-
+      switch (element.type) {
+        case 'submit':
+          element.value = 'Update';
+          break;
+        case 'reset':
+          element.value = 'Cancel';
+          break;
+        case 'checkbox':
+          element.checked = Array.isArray(value) ? value.includes(element.value) : false;
+          break;
+        case 'radio':
+          element.checked = value === element.value;
+          break;
+        case 'select-multiple':
+          Array.from(element.options).forEach((option) => {
+            option.selected = Array.isArray(value) ? value.includes(option.value) : false;
+          });
+          break;
+        default:
+          element.value = value;
+          break;
+      }
+    });
   }
 
-
+  formFullReset() {
+    this.container.reset();
+    Array.from(this.container.elements).forEach((element) => {
+      switch (element.type) {
+        case 'submit':
+          element.value = 'Submit';
+          break;
+        case 'reset':
+          element.value = 'Reset';
+          break;
+      }
+    });
+  }
 }
