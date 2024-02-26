@@ -30,19 +30,13 @@ export default class Storage {
   }
   updateData(getFormData, userId) {
     const data = this.loadData();
+    const objectToReplace =getFormData;
     const originalObject = data.find((item) => item.userId === userId);
-    const objectToReplace = Object.keys(getFormData)
-      .filter((objKey) => objKey !== 'userId')
-      .reduce((newObj, key) => {
-        newObj[key] = getFormData[key];
-        return newObj;
-      }, {});
-
-    for (const key in objectToReplace) {
-      if (key !== 'userId' && key !== 'createdAt') {
-        originalObject[key] = objectToReplace[key];
-      }
+    objectToReplace.createdAt=originalObject.createdAt;
+    const indexToReplace = data.findIndex(item => item.userId === objectToReplace.userId);
+    if (indexToReplace !== -1) {
+      data[indexToReplace] = objectToReplace;
+      localStorage.setItem(this.storageId, JSON.stringify(data));
     }
-    localStorage.setItem(this.storageId, JSON.stringify(data));
   }
 }

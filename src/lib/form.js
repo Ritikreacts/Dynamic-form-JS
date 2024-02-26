@@ -217,7 +217,7 @@ export default class Form {
         }
       }
     });
-    const btn = document.querySelector('[type="submit"]');
+    const btn = document.getElementById('btnSubmit');
     if (btn.value === 'Submit') {
       const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
       document.dispatchEvent(formSubmitEvent);

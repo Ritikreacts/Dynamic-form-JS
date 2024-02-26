@@ -10,6 +10,7 @@ class Main {
     this.tbl = new Table(tableContainerId);
     this.getUserId = (obj) => formData.find((field) => field.key === 'userId').getValue(obj);
     this.getCreatedAt = (obj) => formData.find((field) => field.key === 'createdAt').getValue(obj);
+    this.getFormData = null;
 
     this.setupEventListeners();
   }
@@ -26,15 +27,18 @@ class Main {
     this.initializeHandlers(getFormData);
   }
   handleFormUpdate(event) {
-    const getFormData = event.detail;
+    this.getFormData = event.detail;
     const userId = this.userId;
-    this.editDataHandler(getFormData, userId);
+    this.editDataHandler(this.getFormData, userId);
   }
   handleDeleteItem(event) {
     const userId = event.detail;
     this.storage.deleteData(userId);
     const data = this.storage.loadData();
     this.tbl.updateDisplay(data);
+    if(this.userId==userId){
+      this.frm.formFullReset();
+    }
   }
   handleEditItem(event) {
     this.userId = event.detail;

@@ -20,7 +20,9 @@ export default class Table {
     const actionHeaderCell = document.createElement('th');
     actionHeaderCell.textContent = 'Action';
     headerRow.appendChild(actionHeaderCell);
-    if (!document.querySelector('thead')) {
+    const theadElements = document.getElementsByTagName('thead');
+    const hasThead = theadElements.length > 0;
+    if (!hasThead) {
       thead.appendChild(headerRow);
     }
     this.table.appendChild(thead);
@@ -40,15 +42,18 @@ export default class Table {
 
       row.appendChild(cell);
     });
+    const createButton = (text, clickHandler) => {
+      const button = document.createElement('button');
+      button.textContent = text;
+      button.addEventListener('click', clickHandler);
+      return button;
+    };
     const action = document.createElement('td');
-    const editButton = document.createElement('button');
-    const deleteButton = document.createElement('button');
-    deleteButton.addEventListener('click', (event) => this.handleDelete(event, reorderedFormData.userId));
-    editButton.addEventListener('click', (event) => this.handleEdit(event, reorderedFormData.userId));
-    editButton.textContent = 'Edit';
-    deleteButton.textContent = 'Delete';
+    const editButton = createButton('Edit', (event) => this.handleEdit(event, reorderedFormData.userId));
+    const deleteButton = createButton('Delete', (event) => this.handleDelete(event, reorderedFormData.userId));
     action.appendChild(editButton);
     action.appendChild(deleteButton);
+
     row.appendChild(action);
     this.table.appendChild(row);
   }
@@ -67,15 +72,18 @@ export default class Table {
         cell.textContent = value;
         row.appendChild(cell);
       });
+      const createButton = (text, clickHandler) => {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.addEventListener('click', clickHandler);
+        return button;
+      };
       const action = document.createElement('td');
-      const editButton = document.createElement('button');
-      const deleteButton = document.createElement('button');
-      editButton.textContent = 'Edit';
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', (event) => this.handleDelete(event, reorderedFormData.userId));
-      editButton.addEventListener('click', (event) => this.handleEdit(event, reorderedFormData.userId));
+      const editButton = createButton('Edit', (event) => this.handleEdit(event, reorderedFormData.userId));
+      const deleteButton = createButton('Delete', (event) => this.handleDelete(event, reorderedFormData.userId));
       action.appendChild(editButton);
       action.appendChild(deleteButton);
+
       row.appendChild(action);
       this.table.appendChild(row);
     });
