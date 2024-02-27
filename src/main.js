@@ -36,7 +36,7 @@ class Main {
     this.storage.deleteData(userId);
     const data = this.storage.loadData();
     this.tbl.updateDisplay(data);
-    if(this.userId==userId){
+    if (this.userId == userId) {
       this.frm.formFullReset();
     }
   }
@@ -59,6 +59,13 @@ class Main {
     const data = this.storage.loadData();
     this.tbl.updateDisplay(data);
   }
+  addOnTab(formDataObject) {
+    this.storage.addDataOnSwitch(formDataObject);
+    this.tbl.appendHeader(formDataObject);
+    this.tbl.appendDataRow(formDataObject);
+    const data = this.storage.loadData();
+    this.tbl.updateDisplay(data);
+  }
   editDataHandler(getFormData, userId) {
     const data = this.storage.loadData();
     const formDataToEdit = data.find((obj) => obj.userId === this.userId);
@@ -71,9 +78,8 @@ class Main {
       }, {});
 
     if (JSON.stringify(getFormData) == JSON.stringify(formDataToEditClone)) {
-      alert('No changes');
+      this.frm.formFullReset();
     } else {
-      alert('Changed');
       this.tbl.updateRow(userId, getFormData);
       this.storage.updateData(getFormData, userId);
     }
@@ -86,3 +92,40 @@ main.tbl.appendHeader(formData);
 main.tbl.displayDataOnLoad(dataInStorage);
 const data = main.storage.loadData();
 main.tbl.updateDisplay(data);
+
+//For Synchronous table
+
+window.addEventListener('storage', (change) => {
+  const newVal = JSON.parse(change.newValue);
+  const oldVal = JSON.parse(change.oldValue);
+  console.log(newVal);
+  console.log(oldVal);
+  if (oldVal == !null || oldVal.length == newVal.length) {
+    for (let i = 0; i < oldVal.length; i++) {
+      const obj1 = oldVal[i];
+      const obj2 = newVal[i];
+      for (const key in obj1) {
+        if (obj1[key].hasOwnProperty && obj1[key] !== obj2[key]) {
+          const userIdChanged = obj2.userId;
+          console.log(obj2);
+          return main.tbl.updateRow(userIdChanged, obj2);
+        }
+      }
+    }
+  }
+
+  // newVal.forEach((object) => {
+  //   const userIdChanged = object.userId;
+  //   main.tbl.updateRow(userIdChanged, object);
+  // });
+  else if (newVal.length == oldVal.length - 1) {
+    const userObjectDeleted = oldVal.filter((object) => !newVal.some((obj) => obj.userId === object.userId));
+    const userIdDeleted = userObjectDeleted[0].userId;
+    const rowToDelete = document.getElementById(userIdDeleted);
+    rowToDelete.remove();
+  } else {
+    const newlyAddedObject = newVal.at(-1);
+    main.tbl.appendHeader(formData);
+    main.tbl.appendDataRow(newlyAddedObject);
+  }
+});

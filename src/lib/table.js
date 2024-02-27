@@ -108,8 +108,15 @@ export default class Table {
         newObj[key] = getFormData[key];
         return newObj;
       }, {});
+    const integratedData = Object.keys(RowNewData)
+      .filter((objKey) => objKey !== 'createdAt')
+      .reduce((newObj, key) => {
+        newObj[key] = RowNewData[key];
+        return newObj;
+      }, {});
+
     for (let x = 2; x <= RowToChange.length - 1; x++) {
-      Object.values(RowNewData).forEach((value) => {
+      Object.values(integratedData).forEach((value) => {
         RowToChange[x].innerText = value;
         x += 1;
       });

@@ -56,7 +56,7 @@ export default class Form {
             'class',
             option.attr && option.attr.className ? option.attr.className : 'form-check-input'
           );
-          radioElement.setAttribute('value', option.value);
+          radioElement.setAttribute('value', option.innerText);
 
           const optionLabel = document.createElement('label');
           optionLabel.innerText = option.innerText;
@@ -81,7 +81,7 @@ export default class Form {
             'class',
             option.attr && option.attr.className ? option.attr.className : 'form-check-input'
           );
-          checkboxElement.setAttribute('value', option.value);
+          checkboxElement.setAttribute('value', option.innerText);
 
           const optionLabel = document.createElement('label');
           optionLabel.innerText = option.innerText;
@@ -105,7 +105,7 @@ export default class Form {
         field.options.forEach((option) => {
           const optionElement = document.createElement('option');
           optionElement.innerText = option.innerText;
-          optionElement.setAttribute('value', option.value);
+          optionElement.setAttribute('value', option.innerText);
           selectElement.appendChild(optionElement);
         });
         inputContainer.appendChild(selectElement);
@@ -259,6 +259,12 @@ export default class Form {
           break;
       }
     });
+    const rstBtn = document.getElementById('btnReset');
+    if (rstBtn.value == 'Cancel') {
+      rstBtn.addEventListener('click', () => {
+        this.formFullReset();
+      });
+    }
   }
 
   formFullReset() {

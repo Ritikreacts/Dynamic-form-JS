@@ -28,12 +28,17 @@ export default class Storage {
     data.push(dataToAdd);
     this.saveData(data);
   }
+  addDataOnSwitch(getFormData) {
+    const data = this.loadData();
+    data.push(getFormData);
+    this.saveData(data);
+  }
   updateData(getFormData, userId) {
     const data = this.loadData();
-    const objectToReplace =getFormData;
+    const objectToReplace = getFormData;
     const originalObject = data.find((item) => item.userId === userId);
-    objectToReplace.createdAt=originalObject.createdAt;
-    const indexToReplace = data.findIndex(item => item.userId === objectToReplace.userId);
+    objectToReplace.createdAt = originalObject.createdAt;
+    const indexToReplace = data.findIndex((item) => item.userId === objectToReplace.userId);
     if (indexToReplace !== -1) {
       data[indexToReplace] = objectToReplace;
       localStorage.setItem(this.storageId, JSON.stringify(data));
