@@ -36,197 +36,197 @@ const formData = [
       onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
     },
   },
-  {
-    type: 'email',
-    label: 'Email',
-    key: 'email',
-    value: '',
-    attr: {
-      id: 'txtEmail',
-      className: 'form-control textInput',
-      placeholder: 'Enter email',
-      name: 'txtName',
-      required: true,
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'tel',
-    label: 'Phone',
-    key: 'phone',
-    value: '',
-    attr: {},
-  },
-  {
-    type: 'textarea',
-    label: 'Address',
-    key: 'address',
-    value: '',
-    attr: {
-      id: 'txtAddress',
-      className: 'form-control textInput',
-      placeholder: 'Enter Address',
-      rows: '5',
-      name: 'txtName',
-      required: true, //Add validation for required field
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'text',
-    label: 'Street Address',
-    key: 'street_address',
-    value: '',
-    attr: {
-      id: 'txtStreet',
-      className: 'form-control textInput',
-      placeholder: 'Enter Street Address',
-      name: 'txtName',
-      required: true,
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'text',
-    label: 'City',
-    key: 'city',
-    value: '',
-    attr: {
-      id: 'txtCity',
-      className: 'form-control textInput',
-      placeholder: 'Enter City',
-      name: 'txtName',
-      required: true,
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'text',
-    label: 'State',
-    key: 'state',
-    value: '',
-    attr: {
-      id: 'txtState',
-      className: 'form-control textInput',
-      placeholder: 'Enter State',
-      name: 'txtName',
-      required: true,
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'number',
-    label: 'Pin Code',
-    key: 'pin_code',
-    value: '',
-    attr: {
-      id: 'txtPincode',
-      className: 'form-control textInput',
-      placeholder: 'Enter Pin Code',
-      name: 'txtName',
-      required: true,
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-  },
-  {
-    type: 'select',
-    label: 'Country',
-    key: 'country',
-    value: [],
-    attr: {
-      id: 'txtCountry',
-      name: 'country',
-      required: true,
-      className: 'form-control columns',
-      onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-    },
-    options: [
-      {
-        innerText: 'Select Country',
-        value: '',
-      },
-      {
-        innerText: 'India',
-        value: 'india',
-      },
-      {
-        innerText: 'United States',
-        value: 'united-states',
-      },
-      {
-        innerText: 'Sri Lanka',
-        value: 'sri-lanka',
-      },
-    ],
-  },
-  {
-    type: 'radio',
-    label: 'Gender',
-    key: 'gender',
-    value: '',
-    options: [
-      {
-        innerText: 'Male',
-        value: 'male',
-        name: 'gender',
-        attr: {
-          id: 'male',
-          className: 'form-check-input radioGender',
-          required: true,
-          onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-        },
-      },
-      {
-        innerText: 'Female',
-        value: 'female',
-        name: 'gender',
-        attr: {
-          id: 'female',
-          className: 'form-check-input radioGender',
-          required: true,
-          onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-        },
-      },
-    ],
-  },
-  {
-    type: 'checkbox',
-    label: 'Hobbies',
-    key: 'hobbies',
-    value: [],
-    options: [
-      {
-        innerText: 'Swimming',
-        value: 'swimming',
-        name: 'hobbies',
-        attr: {
-          id: 'swimming',
-          className: 'form-check-input radioHobbies',
-          onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-        },
-      },
-      {
-        innerText: 'Singing',
-        value: 'singing',
-        name: 'hobbies',
-        attr: {
-          id: 'singing',
-          className: 'form-check-input radioHobbies',
-          onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-        },
-      },
-      {
-        innerText: 'Writing',
-        value: 'writing',
-        name: 'hobbies',
-        attr: {
-          id: 'writing',
-          className: 'form-check-input radioHobbies',
-          onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
-        },
-      },
-    ],
-  },
+  // {
+  //   type: 'email',
+  //   label: 'Email',
+  //   key: 'email',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtEmail',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter email',
+  //     name: 'txtName',
+  //     required: true,
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'tel',
+  //   label: 'Phone',
+  //   key: 'phone',
+  //   value: '',
+  //   attr: {},
+  // },
+  // {
+  //   type: 'textarea',
+  //   label: 'Address',
+  //   key: 'address',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtAddress',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter Address',
+  //     rows: '5',
+  //     name: 'txtName',
+  //     required: true, //Add validation for required field
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'text',
+  //   label: 'Street Address',
+  //   key: 'street_address',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtStreet',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter Street Address',
+  //     name: 'txtName',
+  //     required: true,
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'text',
+  //   label: 'City',
+  //   key: 'city',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtCity',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter City',
+  //     name: 'txtName',
+  //     required: true,
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'text',
+  //   label: 'State',
+  //   key: 'state',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtState',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter State',
+  //     name: 'txtName',
+  //     required: true,
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'number',
+  //   label: 'Pin Code',
+  //   key: 'pin_code',
+  //   value: '',
+  //   attr: {
+  //     id: 'txtPincode',
+  //     className: 'form-control textInput',
+  //     placeholder: 'Enter Pin Code',
+  //     name: 'txtName',
+  //     required: true,
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  // },
+  // {
+  //   type: 'select',
+  //   label: 'Country',
+  //   key: 'country',
+  //   value: [],
+  //   attr: {
+  //     id: 'txtCountry',
+  //     name: 'country',
+  //     required: true,
+  //     className: 'form-control columns',
+  //     onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //   },
+  //   options: [
+  //     {
+  //       innerText: 'Select Country',
+  //       value: '',
+  //     },
+  //     {
+  //       innerText: 'India',
+  //       value: 'india',
+  //     },
+  //     {
+  //       innerText: 'United States',
+  //       value: 'united-states',
+  //     },
+  //     {
+  //       innerText: 'Sri Lanka',
+  //       value: 'sri-lanka',
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'radio',
+  //   label: 'Gender',
+  //   key: 'gender',
+  //   value: '',
+  //   options: [
+  //     {
+  //       innerText: 'Male',
+  //       value: 'male',
+  //       name: 'gender',
+  //       attr: {
+  //         id: 'male',
+  //         className: 'form-check-input radioGender',
+  //         required: true,
+  //         onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //       },
+  //     },
+  //     {
+  //       innerText: 'Female',
+  //       value: 'female',
+  //       name: 'gender',
+  //       attr: {
+  //         id: 'female',
+  //         className: 'form-check-input radioGender',
+  //         required: true,
+  //         onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //       },
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'checkbox',
+  //   label: 'Hobbies',
+  //   key: 'hobbies',
+  //   value: [],
+  //   options: [
+  //     {
+  //       innerText: 'Swimming',
+  //       value: 'swimming',
+  //       name: 'hobbies',
+  //       attr: {
+  //         id: 'swimming',
+  //         className: 'form-check-input radioHobbies',
+  //         onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //       },
+  //     },
+  //     {
+  //       innerText: 'Singing',
+  //       value: 'singing',
+  //       name: 'hobbies',
+  //       attr: {
+  //         id: 'singing',
+  //         className: 'form-check-input radioHobbies',
+  //         onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //       },
+  //     },
+  //     {
+  //       innerText: 'Writing',
+  //       value: 'writing',
+  //       name: 'hobbies',
+  //       attr: {
+  //         id: 'writing',
+  //         className: 'form-check-input radioHobbies',
+  //         onchange: function () {}, // e, obj, array, dataObjArray you will get in function argument
+  //       },
+  //     },
+  //   ],
+  // },
   {
     type: 'submit',
     attr: {

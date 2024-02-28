@@ -10,29 +10,42 @@ class Main {
     this.tbl = new Table(tableContainerId);
     this.getUserId = (obj) => formData.find((field) => field.key === 'userId').getValue(obj);
     this.getCreatedAt = (obj) => formData.find((field) => field.key === 'createdAt').getValue(obj);
-    this.getFormData = null;
+    this.getFormData;
 
-    this.setupEventListeners();
-  }
+    this.frm.on('submit', (getFormData) => {
+      this.initializeHandlers(getFormData);
+    });
 
-  setupEventListeners() {
-    document.addEventListener('formSubmit', this.handleFormSubmit.bind(this));
-    document.addEventListener('formUpdateSubmit', this.handleFormUpdate.bind(this));
-    document.addEventListener('deleteItem', this.handleDeleteItem.bind(this));
-    document.addEventListener('editItem', this.handleEditItem.bind(this));
-  }
+    this.tbl.on('edit', (userId) => {
+      console.log('userId in main -', userId);
+      this.handleEditItem(userId);
+    });
 
-  handleFormSubmit(event) {
-    const getFormData = event.detail;
-    this.initializeHandlers(getFormData);
+    this.frm.on('update', (getFormData) => {
+      this.handleFormUpdate(getFormData);
+    });
+
+    this.tbl.on('delete', (userId) => {
+      this.handleDeleteItem(userId);
+    });
   }
-  handleFormUpdate(event) {
-    this.getFormData = event.detail;
+  // setupEventListeners() {
+  //   document.addEventListener('formSubmit', this.handleFormSubmit.bind(this));
+  //   document.addEventListener('formUpdateSubmit', this.handleFormUpdate.bind(this));
+  //   document.addEventListener('deleteItem', this.handleDeleteItem.bind(this));
+  //   document.addEventListener('editItem', this.handleEditItem.bind(this));
+  // }
+
+  // handleFormSubmit(event) {
+  //   const getFormData = event.detail;
+  //   this.initializeHandlers(getFormData);
+  // }
+  handleFormUpdate(getFormData) {
     const userId = this.userId;
-    this.editDataHandler(this.getFormData, userId);
+    this.editDataHandler(getFormData, userId);
   }
-  handleDeleteItem(event) {
-    const userId = event.detail;
+  handleDeleteItem(userId) {
+    console.log('user id deleted-', userId);
     this.storage.deleteData(userId);
     const data = this.storage.loadData();
     this.tbl.updateDisplay(data);
@@ -40,8 +53,8 @@ class Main {
       this.frm.formFullReset();
     }
   }
-  handleEditItem(event) {
-    this.userId = event.detail;
+  handleEditItem(userId) {
+    this.userId = userId;
     const data = this.storage.loadData();
     const formDataToEdit = data.find((obj) => obj.userId === this.userId);
     this.frm.fillFormOnEdit(formDataToEdit);
@@ -98,32 +111,31 @@ main.tbl.updateDisplay(data);
 window.addEventListener('storage', (change) => {
   const newVal = JSON.parse(change.newValue);
   const oldVal = JSON.parse(change.oldValue);
-  console.log(newVal);
-  console.log(oldVal);
-  if (oldVal == !null || oldVal.length == newVal.length) {
-    for (let i = 0; i < oldVal.length; i++) {
-      const obj1 = oldVal[i];
-      const obj2 = newVal[i];
-      for (const key in obj1) {
-        if (obj1[key].hasOwnProperty && obj1[key] !== obj2[key]) {
-          const userIdChanged = obj2.userId;
-          console.log(obj2);
-          return main.tbl.updateRow(userIdChanged, obj2);
+  console.log(oldVal !== null);
+  console.log(oldVal.length === newVal.length);
+  console.log(oldVal.length);
+  console.log(newVal.length);
+  if (oldVal !== null && oldVal.length === newVal.length) {
+    console.log('Value updated from another tab');
+    for (let i = 0; i < newVal.length; i++) {
+      for (let key in newVal[i]) {
+        if (newVal[i][key] !== oldVal[i][key]) {
+          console.log('newVal[i][key]', newVal[i][key]);
+          console.log('oldVal[i][key]', oldVal[i][key]);
+          console.log('newVal[i]', newVal[i]);
+          main.tbl.updateRow(newVal[i].userId, newVal[i]);
         }
       }
     }
-  }
+  } else if (newVal.length == oldVal.length - 1) {
+    console.log('Value deleted from another tab');
 
-  // newVal.forEach((object) => {
-  //   const userIdChanged = object.userId;
-  //   main.tbl.updateRow(userIdChanged, object);
-  // });
-  else if (newVal.length == oldVal.length - 1) {
     const userObjectDeleted = oldVal.filter((object) => !newVal.some((obj) => obj.userId === object.userId));
     const userIdDeleted = userObjectDeleted[0].userId;
     const rowToDelete = document.getElementById(userIdDeleted);
     rowToDelete.remove();
   } else {
+    console.log('Value added from another tab');
     const newlyAddedObject = newVal.at(-1);
     main.tbl.appendHeader(formData);
     main.tbl.appendDataRow(newlyAddedObject);

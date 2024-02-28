@@ -4,6 +4,14 @@ export default class Form {
     this.container.addEventListener('submit', this.handleForm.bind(this));
     this.formData = formData;
     this.startForm();
+    this._events = {};
+    this.on = (eventName, callback) => {
+      if (!this._events[eventName]) {
+        this._events[eventName] = [callback];
+      } else {
+        this._events[eventName].push(callback);
+      }
+    };
   }
 
   startForm() {
@@ -219,12 +227,19 @@ export default class Form {
     });
     const btn = document.getElementById('btnSubmit');
     if (btn.value === 'Submit') {
-      const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
-      document.dispatchEvent(formSubmitEvent);
+      this.on('submit', () => getFormData);
+      this._events['submit'].forEach((fun) => fun(getFormData));
+      console.log(getFormData);
       this.formFullReset();
+
+      // const formSubmitEvent = new CustomEvent('formSubmit', { detail: getFormData });
+      // document.dispatchEvent(formSubmitEvent);
     } else if (btn.value === 'Update') {
-      const formUpdateEvent = new CustomEvent('formUpdateSubmit', { detail: getFormData });
-      document.dispatchEvent(formUpdateEvent);
+      this.on('update', () => getFormData);
+      console.log(getFormData);
+      this._events['update'].forEach((fun) => fun(getFormData));
+      // const formUpdateEvent = new CustomEvent('formUpdateSubmit', { detail: getFormData });
+      // document.dispatchEvent(formUpdateEvent);
       this.resetForm();
       this.formFullReset();
     } else {

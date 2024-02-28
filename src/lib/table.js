@@ -4,6 +4,14 @@ export default class Table {
     this.table = document.createElement('table');
     this.table.classList.add('table', 'table-bordered');
     this.container.appendChild(this.table);
+    this._events = {};
+    this.on = (eventName, callback) => {
+      if (!this._events[eventName]) {
+        this._events[eventName] = [callback];
+      } else {
+        this._events[eventName].push(callback);
+      }
+    };
   }
   appendHeader(formDataArgument) {
     const formData = formDataArgument;
@@ -91,14 +99,20 @@ export default class Table {
 
   handleDelete(event, userId) {
     const rowToDelete = document.getElementById(userId);
-
     rowToDelete.remove();
-    const deleteEvent = new CustomEvent('deleteItem', { detail: userId });
-    document.dispatchEvent(deleteEvent);
+    this.on('delete', () => userId);
+    this._events['delete'].forEach((fun) => fun(userId));
+    // const deleteEvent = new CustomEvent('deleteItem', { detail: userId });
+    // document.dispatchEvent(deleteEvent);
   }
   handleEdit(event, userId) {
-    const editEvent = new CustomEvent('editItem', { detail: userId });
-    document.dispatchEvent(editEvent);
+    console.log('this._events', this._events);
+    // this.on('edit', () => userId);
+    this._events['edit'].forEach((fun) => fun(userId));
+    console.log('userId in Table -', userId);
+    console.log(this._events);
+    // const editEvent = new CustomEvent('editItem', { detail: userId });
+    // document.dispatchEvent(editEvent);
   }
   updateRow(userId, getFormData) {
     const RowToChange = document.getElementById(userId).children;
